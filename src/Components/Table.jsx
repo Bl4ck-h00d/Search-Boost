@@ -1,7 +1,7 @@
 import React, { useState } from 'react'
 import { Table } from 'antd'
 import Search from './Search'
-import data from '../data/data100k.json'
+import data from '../Data/data100k.json'
 
 
 const columns = [
