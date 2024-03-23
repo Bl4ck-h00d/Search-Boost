@@ -1,9 +1,14 @@
-import React from "react";
+import React from 'react'
+import Table from './Components/Table'
 
-function App() {
+
+const App = () => {
+
   return (
-    <></>
-  );
+    <div className="">
+      <Table />
+    </div>
+  )
 }
 
-export default App;
+export default App
