@@ -79,21 +79,46 @@ export const searchBoost = (query, setMetrics) => {
   threadSyncFlag = 0 // Reset the thread synchronization flag
   searchResult = [] // Clear the search result
 
-  // Dispatch tasks to worker threads
-  for (const [idx, workerThread] of workerPool.entries()) {
-    const start = performance.now()
-    
+  const taskQueue = []; // Task queue to store pending search tasks
+
+  // Function to check if a worker is available
+  const isWorkerAvailable = () => {
+    return workerPool.some(worker => !worker.isBusy); // Check if any worker is not busy
+  };
+
+  // Function to execute pending tasks
+  const executePendingTasks = () => {
+    while (taskQueue.length > 0 && isWorkerAvailable()) {
+      const task = taskQueue.shift(); // Get the next task from the queue
+      executeTask(task); // Execute the task
+    }
+  };
+
+  // Function to execute a search task
+  const executeTask = ({ idx, workerThread }) => {
+    const start = performance.now();
+    workerThread.isBusy = true; // Mark the worker as busy
     workerThread.postMessage({
       record: dataChunks[idx],
       searchText: `${query}`,
-    })
+    });
 
     workerThread.addEventListener('message', () => {
       const end = performance.now(); // End measuring thread processing time
       console.log(`Thread ${idx} execution time: ${end - start} milliseconds`);
-      setMetrics(prevState => [...prevState, end - start])
+      setMetrics(prevState => [...prevState, end - start]);
+      workerThread.isBusy = false; // Mark the worker as available
+      executePendingTasks(); // Execute pending tasks
     });
-  }
+  };
 
+  // Dispatch tasks to worker threads or add to the task queue
+  for (const [idx, workerThread] of workerPool.entries()) {
+    if (isWorkerAvailable()) {
+      executeTask({ idx, workerThread }); // Execute task if worker is available
+    } else {
+      taskQueue.push({ idx, workerThread }); // Add task to the queue
+    }
+  }
 
 }
