@@ -40,7 +40,7 @@ const TableWrapper = () => {
     const [dataSource, setDataSource] = useState(newData)
     return (
         <div className='container'>
-            <span>{newData.length} records</span>
+            <span className='data-records'>{newData.length} records</span>
             <Search data={newData} setDataSource={setDataSource} />
             <Table className='table' columns={columns} dataSource={dataSource} />
         </div>

@@ -45,3 +45,46 @@ code {
 .metrics > span {
   margin-right: 1rem;
 }
+
+.data-records {
+  margin-bottom: 0.5rem;
+}
+
+@media only screen and (max-width: 842px) {
+.container {
+  display: flex;
+  flex-direction: column;
+  margin: auto;
+  width: 100%;
+  overflow: scroll;
+}
+
+.table {
+  margin-top: 1rem;
+}
+
+.search-container {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+.search-input {
+  width: 80%;
+  margin-bottom: 1rem;
+}
+
+.metrics {
+  display: flex;
+  width: 100%;
+  font-size: 1rem;
+  align-items: center;
+  justify-content: start;
+  margin-top: 0.5rem;
+}
+
+.metrics > span {
+  margin-right: 1rem;
+}
+}
